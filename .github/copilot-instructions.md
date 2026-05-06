@@ -89,6 +89,7 @@ Cihaz üzerinde otomatik test, exploratory QA:
 6. **Test yaz**: Her yeni component/screen için RNTL ile test öner.
 7. **Profile before optimize**: Optimizasyon yapmadan önce profiling yap.
 8. **TypeScript strict**: Tüm kodda strict TypeScript kullan.
+9. **Değişiklik sonrası test koş**: Herhangi bir kod değişikliği yaptıktan sonra ilgili testleri otomatik olarak çalıştır (`npx jest --testPathPattern=<değişen dosya>` veya `npm test`). Testler kırılırsa düzelt, geçene kadar devam et.
 
 ---
 
