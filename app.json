@@ -1,4 +1,8 @@
 {
-  "name": "ReactNativeWork",
-  "displayName": "ReactNativeWork"
+  "expo": {
+    "name": "ReactNativeWork",
+    "slug": "ReactNativeWork",
+    "version": "1.0.0",
+    "platforms": ["ios", "android"]
+  }
 }
