@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function HaberlerScreen() {
+const HaberlerScreen = memo(function HaberlerScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Haberler</Text>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {

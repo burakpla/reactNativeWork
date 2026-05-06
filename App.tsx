@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 import CustomTabBar from './src/components/CustomTabBar';
 import NewsfeedScreen from './src/screens/NewsfeedScreen';
@@ -8,9 +8,13 @@ import HaberlerScreen from './src/screens/HaberlerScreen';
 import DigerScreen from './src/screens/DigerScreen';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('diger');
+  const [activeTab, setActiveTab] = useState('home');
 
-  const renderScreen = () => {
+  const handleTabPress = useCallback((key: string) => {
+    setActiveTab(key);
+  }, []);
+
+  const screen = useMemo(() => {
     switch (activeTab) {
       case 'newsfeed':
         return <NewsfeedScreen />;
@@ -23,14 +27,14 @@ function App() {
       case 'diger':
         return <DigerScreen />;
       default:
-        return <NewsfeedScreen />;
+        return <HomeScreen />;
     }
-  };
+  }, [activeTab]);
 
   return (
     <View style={styles.container}>
-      {renderScreen()}
-      <CustomTabBar activeTab={activeTab} onTabPress={setActiveTab} />
+      {screen}
+      <CustomTabBar activeTab={activeTab} onTabPress={handleTabPress} />
     </View>
   );
 }

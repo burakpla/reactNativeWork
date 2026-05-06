@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
+  Pressable,
   StyleSheet,
   Platform,
   Image,
@@ -32,7 +32,8 @@ const CURVE_HEIGHT = CENTER_BUTTON_SIZE / 2;
 const BOTTOM_PADDING = Platform.OS === 'ios' ? 20 : 0;
 const TOTAL_HEIGHT = TAB_BAR_HEIGHT + BOTTOM_PADDING;
 
-function getTabBarPath(): string {
+// Pre-compute SVG path at module level (never changes)
+const TAB_BAR_PATH = (() => {
   const centerX = SCREEN_WIDTH / 2;
   const curveRadius = CENTER_BUTTON_SIZE / 2;
 
@@ -46,67 +47,94 @@ function getTabBarPath(): string {
     `L 0 ${TOTAL_HEIGHT + CURVE_HEIGHT}`,
     'Z',
   ].join(' ');
-}
+})();
+
+const SVG_HEIGHT = TOTAL_HEIGHT + CURVE_HEIGHT;
+
+type TabItemProps = {
+  tab: TabItem;
+  isActive: boolean;
+  onTabPress: (key: string) => void;
+};
+
+const TabItemButton = memo(function TabItemButton({ tab, isActive, onTabPress }: TabItemProps) {
+  const handlePress = useCallback(() => {
+    onTabPress(tab.key);
+  }, [onTabPress, tab.key]);
+
+  return (
+    <Pressable
+      key={tab.key}
+      style={styles.tabItem}
+      onPress={handlePress}>
+      <Image
+        source={tab.icon}
+        style={isActive ? styles.tabIconImageActive : styles.tabIconImage}
+        resizeMode="contain"
+      />
+      <Text style={isActive ? styles.tabLabelActive : styles.tabLabel}>
+        {tab.label}
+      </Text>
+    </Pressable>
+  );
+});
+
+type CenterButtonProps = {
+  tab: TabItem;
+  onTabPress: (key: string) => void;
+};
+
+const CenterButton = memo(function CenterButton({ tab, onTabPress }: CenterButtonProps) {
+  const handlePress = useCallback(() => {
+    onTabPress(tab.key);
+  }, [onTabPress, tab.key]);
+
+  return (
+    <Pressable
+      style={styles.centerButton}
+      onPress={handlePress}>
+      <View style={styles.centerCircle}>
+        <Image source={tab.icon} style={styles.centerLogo} resizeMode="contain" />
+      </View>
+    </Pressable>
+  );
+});
 
 type CustomTabBarProps = {
   activeTab: string;
   onTabPress: (key: string) => void;
 };
 
-function CustomTabBar({ activeTab, onTabPress }: CustomTabBarProps) {
+const CustomTabBar = memo(function CustomTabBar({ activeTab, onTabPress }: CustomTabBarProps) {
   return (
     <View style={styles.container}>
       <Svg
         width={SCREEN_WIDTH}
-        height={TOTAL_HEIGHT + CURVE_HEIGHT}
+        height={SVG_HEIGHT}
         style={styles.svgBackground}>
-        <Path d={getTabBarPath()} fill="rgb(29, 48, 117)" />
+        <Path d={TAB_BAR_PATH} fill="rgb(29, 48, 117)" />
       </Svg>
       <View style={styles.tabRow}>
         {tabs.map((tab) => {
           if (tab.key === 'home') {
             return (
-              <TouchableOpacity
-                key={tab.key}
-                style={styles.centerButton}
-                onPress={() => onTabPress(tab.key)}
-                activeOpacity={0.8}>
-                <View style={styles.centerCircle}>
-                  <Image source={tab.icon} style={styles.centerLogo} resizeMode="contain" />
-                </View>
-              </TouchableOpacity>
+              <CenterButton key={tab.key} tab={tab} onTabPress={onTabPress} />
             );
           }
 
-          const isActive = activeTab === tab.key;
           return (
-            <TouchableOpacity
+            <TabItemButton
               key={tab.key}
-              style={styles.tabItem}
-              onPress={() => onTabPress(tab.key)}
-              activeOpacity={0.7}>
-              <Image
-                source={tab.icon}
-                style={[
-                  styles.tabIconImage,
-                  isActive && styles.tabIconImageActive,
-                ]}
-                resizeMode="contain"
-              />
-              <Text
-                style={[
-                  styles.tabLabel,
-                  isActive && styles.tabLabelActive,
-                ]}>
-                {tab.label}
-              </Text>
-            </TouchableOpacity>
+              tab={tab}
+              isActive={activeTab === tab.key}
+              onTabPress={onTabPress}
+            />
           );
         })}
       </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -114,17 +142,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: TOTAL_HEIGHT + CURVE_HEIGHT,
+    height: SVG_HEIGHT,
   },
   svgBackground: {
     position: 'absolute',
     bottom: 0,
     left: 0,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.16,
-    shadowRadius: 4,
-    elevation: 8,
+    boxShadow: '0 -2px 4px rgba(0, 0, 0, 0.16)',
   },
   tabRow: {
     flexDirection: 'row',
@@ -149,7 +173,10 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   tabIconImageActive: {
+    width: 16,
+    height: 16,
     tintColor: 'rgb(255, 237, 0)',
+    marginBottom: 4,
   },
   tabLabel: {
     fontSize: 10,
@@ -158,7 +185,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tabLabelActive: {
+    fontSize: 10,
+    fontWeight: '600',
     color: 'rgb(255, 237, 0)',
+    textAlign: 'center',
   },
   centerButton: {
     alignItems: 'center',
@@ -169,14 +199,11 @@ const styles = StyleSheet.create({
     width: CENTER_BUTTON_SIZE,
     height: CENTER_BUTTON_SIZE,
     borderRadius: CENTER_BUTTON_SIZE / 2,
+    borderCurve: 'continuous',
     backgroundColor: 'rgb(255, 237, 0)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 6,
+    boxShadow: '0 0 4px rgba(0, 0, 0, 0.25)',
   },
   centerLogo: {
     width: 48,

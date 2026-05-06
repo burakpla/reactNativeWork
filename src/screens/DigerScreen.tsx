@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-function DigerScreen() {
+const DigerScreen = memo(function DigerScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Diğer</Text>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   container: {
