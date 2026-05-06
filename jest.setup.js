@@ -1,15 +1,10 @@
-// Mock react-native-mmkv
-jest.mock('react-native-mmkv', () => ({
-  createMMKV: jest.fn(() => ({
-    getString: jest.fn(),
-    set: jest.fn(),
-    delete: jest.fn(),
-    contains: jest.fn(),
-    getBoolean: jest.fn(),
-    getNumber: jest.fn(),
-    getAllKeys: jest.fn().mockReturnValue([]),
-    clearAll: jest.fn(),
-  })),
+// Mock @react-native-async-storage/async-storage
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  getItem: jest.fn(() => Promise.resolve(null)),
+  setItem: jest.fn(() => Promise.resolve()),
+  removeItem: jest.fn(() => Promise.resolve()),
+  clear: jest.fn(() => Promise.resolve()),
+  getAllKeys: jest.fn(() => Promise.resolve([])),
 }));
 
 // Mock react-native-reanimated

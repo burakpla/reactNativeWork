@@ -22,10 +22,15 @@ const THEME_STORAGE_KEY = 'app.themeMode';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
-    const stored = storage.getString(THEME_STORAGE_KEY);
-    return (stored as ThemeMode) || 'system';
-  });
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('system');
+
+  useEffect(() => {
+    storage.getString(THEME_STORAGE_KEY).then(stored => {
+      if (stored === 'dark' || stored === 'light' || stored === 'system') {
+        setThemeModeState(stored);
+      }
+    });
+  }, []);
 
   const setThemeMode = useCallback((mode: ThemeMode) => {
     setThemeModeState(mode);

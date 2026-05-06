@@ -1,5 +1,13 @@
-import { createMMKV } from 'react-native-mmkv';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const storage = createMMKV({
-  id: 'portal-base-rn-storage',
-});
+export const storage = {
+  getString: async (key: string): Promise<string | null> => {
+    return AsyncStorage.getItem(key);
+  },
+  set: async (key: string, value: string): Promise<void> => {
+    await AsyncStorage.setItem(key, value);
+  },
+  delete: async (key: string): Promise<void> => {
+    await AsyncStorage.removeItem(key);
+  },
+};

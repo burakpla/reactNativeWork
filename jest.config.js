@@ -4,7 +4,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation|react-native-reanimated|react-native-screens|react-native-safe-area-context|@react-native-community|expo|expo-localization|@shopify/flash-list|react-native-mmkv|react-redux|@reduxjs/toolkit|immer|i18next|react-i18next)/)',
+    'node_modules/(?!(react-native|@react-native|@react-navigation|react-native-reanimated|react-native-screens|react-native-safe-area-context|@react-native-community|@react-native-async-storage|expo|expo-localization|@shopify/flash-list|react-redux|@reduxjs/toolkit|immer|i18next|react-i18next)/)',
   ],
   setupFiles: ['./jest.setup.js'],
 };
