@@ -86,7 +86,7 @@ Cihaz üzerinde otomatik test, exploratory QA:
 3. **Barrel export kullanma**: `index.ts` üzerinden re-export yapmaktan kaçın.
 4. **Inline object/function kaçın**: Render içinde inline object ve arrow function oluşturma.
 5. **Reanimated kullan**: Animasyonlar için JS thread'i bloklamayan `react-native-reanimated` tercih et.
-6. **Test yaz**: Her yeni component/screen için RNTL ile test öner.
+6. **Test yaz**: Her yeni veya değiştirilen component/screen için RNTL testi yaz veya mevcut testi güncelle. Test dosyası yoksa oluştur (`__tests__/<ComponentAdı>.test.tsx`).
 7. **Profile before optimize**: Optimizasyon yapmadan önce profiling yap.
 8. **TypeScript strict**: Tüm kodda strict TypeScript kullan.
 9. **Değişiklik sonrası test koş**: Herhangi bir kod değişikliği yaptıktan sonra ilgili testleri otomatik olarak çalıştır (`npx jest --testPathPattern=<değişen dosya>` veya `npm test`). Testler kırılırsa düzelt, geçene kadar devam et.
