@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ReactNativeWork",
-    "slug": "ReactNativeWork",
+    "name": "PORTAL BASE RN",
+    "slug": "portal-base-rn",
     "version": "1.0.0",
     "platforms": ["ios", "android"]
   }

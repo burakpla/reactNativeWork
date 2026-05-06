@@ -1,97 +1,152 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# PORTAL BASE RN
 
-# Getting Started
+React Native base template — yeni projeler için hazır altyapı.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Tech Stack
 
-## Step 1: Start Metro
+| Katman | Teknoloji |
+|--------|-----------|
+| Framework | React Native 0.83+ / Expo ~55 / React 19 |
+| Navigation | React Navigation 7 (Native Stack + Bottom Tabs) |
+| State | Redux Toolkit |
+| Storage | react-native-mmkv |
+| Animation | react-native-reanimated 3 |
+| Lists | @shopify/flash-list |
+| i18n | i18next + react-i18next |
+| Tema | Dark/Light (Context + useColorScheme + MMKV persist) |
+| Env Config | react-native-dotenv |
+| Language | TypeScript (strict) |
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Kurulum
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+```bash
+# 1. Repo'yu klonla ve bağımlılıkları yükle
+git clone <repo-url> my-new-app
+cd my-new-app
+npm install
 
-```sh
-# Using npm
-npm start
+# 2. iOS pod'larını yükle
+cd ios && pod install && cd ..
 
-# OR using Yarn
-yarn start
-```
+# 3. Env dosyasını oluştur
+cp .env.example .env
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+# 4. Çalıştır
 npm run ios
-
-# OR using Yarn
-yarn ios
+# veya
+npm run android
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Proje Yapısı
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```
+src/
+├── app/                → App entry, provider hierarchy
+│   └── App.tsx
+├── navigation/         → React Navigation config
+│   ├── RootNavigator.tsx
+│   ├── TabNavigator.tsx
+│   └── types.ts
+├── screens/            → Ekranlar
+│   ├── HomeScreen.tsx
+│   └── SettingsScreen.tsx
+├── components/         → Yeniden kullanılabilir UI bileşenleri
+├── store/              → Redux Toolkit
+│   ├── index.ts        → configureStore
+│   ├── hooks.ts        → useAppDispatch, useAppSelector
+│   └── slices/
+│       └── appSlice.ts
+├── theme/              → Tema sistemi
+│   ├── ThemeContext.tsx
+│   ├── colors.ts       → dark & light paletler
+│   └── spacing.ts      → spacing, borderRadius, fontSize
+├── i18n/               → Çoklu dil desteği
+│   ├── index.ts
+│   └── locales/
+│       ├── tr.json
+│       └── en.json
+├── storage/            → MMKV wrapper
+│   └── index.ts
+├── hooks/              → Custom hooks
+│   └── useAppTheme.ts
+├── services/           → API calls, business logic
+├── utils/              → Utility fonksiyonlar
+├── types/              → Global TypeScript types
+├── constants/          → Env config, sabitler
+└── assets/             → Statik dosyalar (icons, images, fonts)
+```
 
-## Step 3: Modify your app
+## Yeni Ekran Ekleme
 
-Now that you have successfully run the app, let's make changes!
+1. `src/screens/MyScreen.tsx` oluştur
+2. `src/navigation/types.ts` dosyasına param type ekle
+3. Navigator'a screen ekle (TabNavigator veya RootNavigator)
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Tema Kullanımı
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+```tsx
+import { useAppTheme } from '@/hooks/useAppTheme';
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+function MyComponent() {
+  const { colors, spacing, isDark } = useAppTheme();
+  return <View style={{ backgroundColor: colors.background, padding: spacing.lg }} />;
+}
+```
 
-## Congratulations! :tada:
+## i18n Kullanımı
 
-You've successfully run and modified your React Native App. :partying_face:
+```tsx
+import { useTranslation } from 'react-i18next';
 
-### Now what?
+function MyComponent() {
+  const { t } = useTranslation();
+  return <Text>{t('common.home')}</Text>;
+}
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Yeni string eklemek için `src/i18n/locales/tr.json` ve `en.json` dosyalarını güncelle.
 
-# Troubleshooting
+## Redux Store Kullanımı
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```tsx
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setLanguage } from '@/store/slices/appSlice';
 
-# Learn More
+function MyComponent() {
+  const dispatch = useAppDispatch();
+  const language = useAppSelector(state => state.app.language);
+  dispatch(setLanguage('en'));
+}
+```
 
-To learn more about React Native, take a look at the following resources:
+## Path Aliases
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+`@/` → `src/` olarak çözümlenir. Tüm import'larda kullanılabilir:
+
+```tsx
+import { useAppTheme } from '@/hooks/useAppTheme';
+import HomeScreen from '@/screens/HomeScreen';
+```
+
+## Scripts
+
+```bash
+npm start         # Metro bundler
+npm run ios       # iOS simulator
+npm run android   # Android emulator
+npm test          # Jest testleri
+npm run lint      # ESLint
+```
+
+## Geliştirme Kuralları
+
+1. **Performans önce**: Yeni component yazarken memo, useCallback, useMemo kullan.
+2. **FlashList > FlatList**: Büyük listeler için her zaman `@shopify/flash-list` kullan.
+3. **Barrel export kullanma**: `index.ts` üzerinden re-export yapmaktan kaçın — bundle size'ı şişirir.
+4. **Inline object/function kaçın**: Render içinde inline object ve arrow function oluşturma (gereksiz re-render'a yol açar).
+5. **Reanimated kullan**: Animasyonlar için JS thread'i bloklamayan `react-native-reanimated` tercih et.
+6. **Test yaz**: Her yeni veya değiştirilen component/screen için test yaz (`__tests__/<ComponentAdı>.test.tsx`).
+7. **TypeScript strict**: Tüm kodda strict TypeScript kullan, `any` kullanmaktan kaçın.
+8. **Path aliases kullan**: Import'larda `@/` prefix'i kullan (`@/hooks/useAppTheme` gibi).
+9. **Tema hook'unu kullan**: Hardcoded renk/spacing yerine `useAppTheme()` hook'undan gelen değerleri kullan.
+10. **i18n string'leri kullan**: Ekranlarda hardcoded metin yerine `t('key')` kullan.

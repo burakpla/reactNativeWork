@@ -1,0 +1,26 @@
+{
+  "common": {
+    "home": "Ana Sayfa",
+    "settings": "Ayarlar",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "ok": "Tamam",
+    "error": "Hata",
+    "loading": "Yükleniyor...",
+    "retry": "Tekrar Dene"
+  },
+  "home": {
+    "welcome": "Hoş Geldiniz",
+    "subtitle": "PORTAL BASE RN"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "theme": "Tema",
+    "themeSystem": "Sistem",
+    "themeDark": "Koyu",
+    "themeLight": "Açık",
+    "language": "Dil",
+    "languageTr": "Türkçe",
+    "languageEn": "English"
+  }
+}

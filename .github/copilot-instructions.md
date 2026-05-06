@@ -1,16 +1,21 @@
 # GitHub Copilot Instructions
 
-Bu proje bir React Native (Expo + bare workflow) uygulamasıdır. Aşağıdaki skill dosyaları, kod yazarken ve review yaparken rehber olarak kullanılmalıdır.
+Bu proje **PORTAL BASE RN** — React Native projelerinde kullanılacak base template'tir.
 
 ---
 
 ## Proje Bağlamı
 
 - **Platform**: React Native 0.83+ / Expo ~55 / React 19
-- **Dil**: TypeScript
-- **Navigasyon**: Manuel tab-based (useState + CustomTabBar)
-- **Tema**: Dark theme (navy/blue/yellow renk paleti)
-- **Hedef**: Spor/futbol haberleri uygulaması (Türkçe)
+- **Dil**: TypeScript (strict)
+- **Navigasyon**: React Navigation 7 (Native Stack + Bottom Tabs)
+- **State Management**: Redux Toolkit
+- **Storage**: react-native-mmkv
+- **Animations**: react-native-reanimated 3
+- **Lists**: @shopify/flash-list
+- **i18n**: i18next + react-i18next
+- **Tema**: Dark/Light (Context-based, MMKV persist)
+- **Path Aliases**: `@/` → `src/`
 
 ---
 
@@ -97,23 +102,25 @@ Cihaz üzerinde otomatik test, exploratory QA:
 
 ```
 src/
-├── components/    → Reusable UI components
+├── app/           → App entry, provider hierarchy
+├── navigation/    → React Navigation config (RootNavigator, TabNavigator, types)
 ├── screens/       → Screen-level components
+├── components/    → Reusable UI components
+├── store/         → Redux Toolkit (configureStore, hooks, slices/)
+├── theme/         → Theme system (ThemeContext, colors, spacing)
+├── i18n/          → Internationalization (config + locales/)
+├── storage/       → MMKV storage wrapper
 ├── hooks/         → Custom hooks
 ├── services/      → API calls, business logic
 ├── utils/         → Utility functions
 ├── types/         → TypeScript type definitions
-├── constants/     → App constants, theme colors
+├── constants/     → App constants, env config
 └── assets/        → Static assets (icons, images, fonts)
 ```
 
 ---
 
-## Renk Paleti
+## Tema Sistemi
 
-| Kullanım | Renk | Hex |
-|----------|------|-----|
-| Background | Koyu lacivert | `#0a1128` |
-| Tab bar | Koyu mavi | `rgb(29, 48, 117)` |
-| Accent/Active | Sarı | `rgb(255, 237, 0)` |
-| Text (inactive) | Beyaz | `#FFFFFF` |
+Renkler `src/theme/colors.ts` dosyasında tanımlıdır (dark & light paletler). Tema `useAppTheme()` hook'u ile kullanılır.
+Yeni bir proje oluşturulurken renk paleti `colors.ts` üzerinden değiştirilmelidir.

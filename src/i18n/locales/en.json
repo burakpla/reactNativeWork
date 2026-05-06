@@ -1,0 +1,26 @@
+{
+  "common": {
+    "home": "Home",
+    "settings": "Settings",
+    "save": "Save",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "error": "Error",
+    "loading": "Loading...",
+    "retry": "Retry"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "subtitle": "PORTAL BASE RN"
+  },
+  "settings": {
+    "title": "Settings",
+    "theme": "Theme",
+    "themeSystem": "System",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "language": "Language",
+    "languageTr": "Türkçe",
+    "languageEn": "English"
+  }
+}
